@@ -9,12 +9,16 @@ class Rediska_Command_GetSortedSet_WithScoresIterator extends Rediska_Connection
         }
 
         $value = Rediska_Connection_Exec::readResponseFromConnection($this->_connection);
-
+        if ($value === 'RECONNECT') {
+            throw new Rediska_Connection_Exception('Reconnect Need');
+        }
         parent::next();
         parent::valid();
 
         $score = Rediska_Connection_Exec::readResponseFromConnection($this->_connection);
-
+        if ($score === 'RECONNECT') {
+            throw new Rediska_Connection_Exception('Reconnect Need');
+        }
         $response = array($value, $score);
 
         if ($this->_callback !== null) {

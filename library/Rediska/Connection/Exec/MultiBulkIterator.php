@@ -90,7 +90,9 @@ class Rediska_Connection_Exec_MultiBulkIterator implements Iterator, Countable
         }
 
         $response = Rediska_Connection_Exec::readResponseFromConnection($this->_connection);
-
+        if ($response === 'RECONNECT') {
+            throw new Rediska_Connection_Exception('Reconnect Need');
+        }
         if ($this->_callback !== null) {
             $response = call_user_func($this->_callback, $response);
         }

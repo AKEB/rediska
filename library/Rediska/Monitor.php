@@ -241,7 +241,9 @@ class Rediska_Monitor extends Rediska_Options_RediskaInstance implements Iterato
     protected function _getResponseFromConnection(Rediska_Connection $connection)
     {
         $response = Rediska_Connection_Exec::readResponseFromConnection($connection);
-
+        if ($response === 'RECONNECT') {
+            return null;
+        }
         if ($response === null || $response === true) {
             return null;
         }

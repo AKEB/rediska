@@ -104,32 +104,33 @@ class Rediska_Connection_Exec
      * 
      * @return array|string
      */
-    public function read()
-    {
+    public function read() {
         if (!$this->isWritten()) {
             throw new Rediska_Connection_Exec_Exception('You must write command before read');
         }
-
+        
         $this->_isWritten = false;
-
+        
         if ($this->getResponseIterator() !== null) {
             if ($this->getResponseIterator() === true) {
                 $className = 'Rediska_Connection_Exec_MultiBulkIterator';
             } else {
                 $className = $this->getResponseIterator();
             }
-
+            
             $response = new $className($this->getConnection(), $this->getResponseCallback());
         } else {
-            $response = self::readResponseFromConnection($this->getConnection());
-
+            
+            $response = self::readResponseFromConnection($this->getConnection(),$this->getConnection()->getHost(), $this->getConnection()->getPort());
+            if ($response === 'RECONNECT') {
+                return $this->execute();
+            }
             if ($this->_responseCallback !== null) {
                 $response = call_user_func($this->getResponseCallback(), $response);
             }
         }
-
-        return $response;
-    }
+    return $response;
+}
 
     /**
      * Execute command
@@ -253,7 +254,7 @@ class Rediska_Connection_Exec
      * @param Rediska_Connection $connection
      * @return mixed
      */
-    public static function readResponseFromConnection(Rediska_Connection $connection)
+    public static function readResponseFromConnection(Rediska_Connection $connection,$host='',$port='')
     {
         $reply = $connection->readLine();
 
@@ -272,7 +273,8 @@ class Rediska_Connection_Exec
                     return $data;
                 }
             case self::REPLY_ERROR:
-                throw new Rediska_Connection_Exec_Exception($data);
+                $message = substr($data, 4);
+                throw new Rediska_Connection_Exec_Exception($message);
             case self::REPLY_INTEGER:
                 if (strpos($data, '.') !== false) {
                     $number = (integer)$data;
@@ -294,7 +296,11 @@ class Rediska_Connection_Exec
 
                 $replies = array();
                 for ($i = 0; $i < $count; $i++) {
-                    $replies[] = self::readResponseFromConnection($connection);
+                    $status = self::readResponseFromConnection($connection);
+                    if ($status === 'RECONNECT') {
+                        throw new Rediska_Connection_Exception('Reconnect Need');
+                    }
+                    $replies[] = $status;
                 }
 
                 return $replies;          

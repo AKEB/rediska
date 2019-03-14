@@ -147,6 +147,8 @@ class Rediska_Connection_Specified
      */
     public function getKeysByPattern($pattern) { $args = func_get_args(); return $this->_executeCommand('getKeysByPattern', $args); }
 
+    public function getKeysByScan($cursor, $pattern, $count) { $args = func_get_args(); return $this->_executeCommand('getKeysByScan', $args); }
+
     /**
      * Return a random key from the key space
      *
@@ -841,7 +843,7 @@ class Rediska_Connection_Specified
      *
      * @return mixed
      */
-    public function info() { $args = func_get_args(); return $this->_executeCommand('info', $args); }
+    public function info() { $args = func_get_args(); return $this->_executeCommand('info all', $args); }
 
     /**
      * This command is often used to test if a connection is still alive, or to

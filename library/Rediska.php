@@ -737,6 +737,8 @@ class Rediska extends Rediska_Options
      */
     public function getKeysByPattern($pattern) { $args = func_get_args(); return $this->_executeCommand('getKeysByPattern', $args); }
 
+    public function getKeysByScan($cursor, $pattern, $count) { $args = func_get_args(); return $this->_executeCommand('getKeysByScan', $args); }
+
     /**
      * Return a random key from the key space
      *

@@ -521,7 +521,9 @@ class Rediska_PubSub_Channel extends Rediska_Options_RediskaInstance implements 
     protected function _getResponseFromConnection(Rediska_Connection $connection)
     {
         $response = Rediska_Connection_Exec::readResponseFromConnection($connection);
-
+        if ($response === 'RECONNECT') {
+            throw new Rediska_Connection_Exception('Reconnect Need');
+        }
         if ($response === null || $response === true) {
             return null;
         }

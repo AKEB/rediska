@@ -26,6 +26,7 @@ class Rediska_Commands
         'delete'           => 'Rediska_Command_Delete',
         'gettype'          => 'Rediska_Command_GetType',
         'getkeysbypattern' => 'Rediska_Command_GetKeysByPattern',
+        'getkeysbyscan'    => 'Rediska_Command_GetKeysByScan',
         'getrandomkey'     => 'Rediska_Command_GetRandomKey',
         'rename'           => 'Rediska_Command_Rename',
         'getkeyscount'     => 'Rediska_Command_GetKeysCount',

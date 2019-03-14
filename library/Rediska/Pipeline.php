@@ -222,6 +222,8 @@ class Rediska_Pipeline
      */
     public function getKeysByPattern($pattern) { $args = func_get_args(); return $this->_addCommand('getKeysByPattern', $args); }
 
+    public function getKeysByScan($cursor, $pattern, $count) { $args = func_get_args(); return $this->_executeCommand('getKeysByScan', $args); }
+    
     /**
      * Return a random key from the key space
      *
